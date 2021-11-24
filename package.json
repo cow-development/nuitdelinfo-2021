@@ -1,0 +1,19 @@
+{
+  "name": "@cow-development/nuitdelinfo-2021",
+  "version": "0.1.0",
+  "description": "",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cow-development/nuitdelinfo-2021.git"
+  },
+  "author": "cow-development",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cow-development/nuitdelinfo-2021/issues"
+  },
+  "homepage": "https://github.com/cow-development/nuitdelinfo-2021#readme"
+}
