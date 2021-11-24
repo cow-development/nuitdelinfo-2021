@@ -1,10 +1,12 @@
 import { DatabaseService } from './database.service';
+import { RepositoryService } from './repository.service';
 
 /**
  * Application global initialization service.
  */
 class InitService {
   private _dbService = <DatabaseService>{};
+  private _rpService = <RepositoryService>{};
 
   get databaseService() {
     return this._dbService;
@@ -12,7 +14,13 @@ class InitService {
 
   async start() {
     this._dbService = new DatabaseService();
-    this._dbService.setupDatabase();
+    await this._dbService.setupDatabase();
+    
+    this._rpService = new RepositoryService(
+      this._dbService
+        .modelService
+        .models
+    );
   }
 }
 
