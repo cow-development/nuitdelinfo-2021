@@ -38,7 +38,7 @@ export class DatabaseService implements IMonitored {
 
       return connection;
       
-    } catch (e: any) {
+    } catch (e) {
       this._monitor.log(LogType.failed, `Failed to create connection with database`);
       this._monitor.log(LogType.failed, '  Aborted process');
       throw e;
