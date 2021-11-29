@@ -1,6 +1,17 @@
+import { AppRouter } from './app.router';
+import cors from 'cors';
 import dotenv from 'dotenv';
+import { ErrorHandler } from './model/error.model';
 import express from 'express';
 import { initService } from './services/init.service';
+import { MonitoringService } from './services/monitoring.service';
+import morgan from 'morgan';
+import {
+  NextFunction,
+  Request,
+  Response
+} from 'express';
+import { LogType } from './model/log.model';
 
 (async () => {
   // load the environment variables from the .env file
@@ -14,19 +25,64 @@ import { initService } from './services/init.service';
    */
   class Server {
     public app = express();
+    public appRouter = <AppRouter>{};
+
+    private _monitor = new MonitoringService(this.constructor.name);
+
+    get monitor() {
+      return this._monitor;
+    }
 
     constructor() {}
 
     async configureRouter() {
-      // TODO 🛠 start init service
       await initService.start();
-      // TODO 🛠 this.appRouter = new AppRouter(initService.controllerService);
+      this.appRouter = new AppRouter(initService.controllerService);
     }
   }
 
   // initialize server app
   const server = new Server();
+
+  if (process.env.APP_ENV === 'production') {
+    // make server use static front-end files
+    server.app.use(express.static('public'));
+  }
+  
+  // configurate server app body parser
+  server.app.use(express.json());
+  server.app.use(express.urlencoded({
+    extended: true
+  }));
+
+  // make server app use cors
+  server.app.use(cors());
+  
+  // make server app use morgan logging system with custom tokens
+  morgan.token('angle-bracket', () => '>');
+  morgan.token('timestamp', () => new Date().toISOString());
+  server.app.use(
+    morgan(':angle-bracket :timestamp :method :url :status :res[content-length] - :response-time ms')
+  );
+  
+  // make server app handle any route starting with '/api'
   await server.configureRouter();
+  server.app.use('/api', server.appRouter.router);
+
+  // make server app handle any error
+  server.app.use((err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
+    const statusCode = err.statusCode || 500;
+    if (statusCode === 500) {
+      server.monitor.log(LogType.failed, `↱ [NOT HANDLED] : ${err.stack as string}`);
+    }
+    else server.monitor.log(LogType.failed, `↱ ${err.message}`);
+
+    res.status(statusCode).json({
+      status: 'error',
+      statusCode: err.statusCode,
+      message: err.message
+    });
+  });
 
   // make server listen on some port
   ((port = process.env.APP_PORT || 5000) => {
