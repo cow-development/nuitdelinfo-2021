@@ -1,14 +1,18 @@
-import { IMonitored } from './model/IMonitored';
-import { MonitoringService } from './services/monitoring.service';
+import { ControllerService } from '../services/controller.service';
+import { IMonitored } from '../model/IMonitored';
+import { LogType } from '../model/log.model';
+import { MonitoringService } from '../services/monitoring.service';
+import { PublicRouter } from './public/public.router';
 import { Router } from 'express';
-import { LogType } from './model/log.model';
-import { ControllerService } from './services/controller.service';
 
 /**
  * Application main (and unique) router.
  */
 export class AppRouter implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);
+
+  private _publicRouter = <PublicRouter>{};
+  // private _privateRouter = <PrivateRouter>{};
 
   private _router = Router();
 
@@ -27,12 +31,8 @@ export class AppRouter implements IMonitored {
   private _setupRoutes() {
     this._monitor.log(LogType.pending, 'Setting up application routes...');
 
-    this._router.get('/user', (req, res, next) => {
-      this._controllerService.userController.any(req, res, next)
-        .then(result =>
-          res.status(200).json(result)
-        );
-    });
+    this._publicRouter = new PublicRouter(this._controllerService.accountController);
+    this._router.use('/public', this._publicRouter.router);
 
     this._router
       .stack

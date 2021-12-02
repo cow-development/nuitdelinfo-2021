@@ -1,7 +1,7 @@
-import { AppRouter } from './app.router';
+import { AppRouter } from './routers/app.router';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import { ErrorHandler } from './model/error.model';
+import { AppError } from './model/error.model';
 import express from 'express';
 import { initService } from './services/init.service';
 import { MonitoringService } from './services/monitoring.service';
@@ -70,7 +70,7 @@ import { LogType } from './model/log.model';
   server.app.use('/api', server.appRouter.router);
 
   // make server app handle any error
-  server.app.use((err: ErrorHandler, req: Request, res: Response, next: NextFunction) => {
+  server.app.use((err: AppError, req: Request, res: Response, next: NextFunction) => {
     const statusCode = err.statusCode || 500;
     if (statusCode === 500) {
       server.monitor.log(LogType.failed, `↱ [NOT HANDLED] : ${err.stack as string}`);

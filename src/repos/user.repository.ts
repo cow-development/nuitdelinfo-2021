@@ -1,6 +1,7 @@
+import { CreateUserPayload } from '../model/DTO/create-user.payload';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
-import { IUserModel } from '../model/mongoose/user.types';
+import { IUserModel } from '../model/mongoose/user/user.types';
 import { MonitoringService } from '../services/monitoring.service';
 
 export class UserRepository implements IMonitored {
@@ -14,13 +15,7 @@ export class UserRepository implements IMonitored {
     this._monitor.log(LogType.passed, 'Initialized user repository');
   }
 
-  async create() {
-    await this._model.create({
-      username: 'fairyfingers',
-      password: {
-        hash: 'hash',
-        salt: 'salt'
-      }
-    });
+  async create(payload: CreateUserPayload) {
+    console.log(payload);
   }
 }

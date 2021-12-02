@@ -1,13 +1,12 @@
-import {
-  Connection,
-  Document,
-  Model
-} from 'mongoose';
+import { Connection } from 'mongoose';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
-import { IUserDocument, IUserModel } from '../model/mongoose/user.types';
+import {
+  IUserDocument,
+  IUserModel
+} from '../model/mongoose/user/user.types';
 import { MonitoringService } from './monitoring.service';
-import userSchema from '../model/mongoose/user.schema';
+import userSchema from '../model/mongoose/user/user.schema';
 
 export class ModelService implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);

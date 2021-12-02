@@ -4,7 +4,7 @@ import {
 } from 'mongoose';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
-import { IUserModel } from '../model/mongoose/user.types';
+import { IUserModel } from '../model/mongoose/user/user.types';
 import { UserRepository } from '../repos/user.repository';
 import { MonitoringService } from './monitoring.service';
 

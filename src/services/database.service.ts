@@ -1,5 +1,5 @@
 import { createConnection } from 'mongoose';
-import { ErrorHandler } from '../model/error.model';
+import { AppError } from '../model/error.model';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
 import { ModelService } from './model.service';
@@ -51,7 +51,7 @@ export class DatabaseService implements IMonitored {
       !process.env.DB_NAME ||
       !process.env.DB_USER_NAME ||
       !process.env.DB_USER_PASSWORD
-    ) throw new ErrorHandler(500, 'Couldn\'t retrieve either cloud database URI or name, user or password from .env file.');
+    ) throw new AppError(500, 'Couldn\'t retrieve either cloud database URI or name, user or password from .env file.');
 
     return process.env.DB_URI
       .replace('<dbname>', process.env.DB_NAME)
