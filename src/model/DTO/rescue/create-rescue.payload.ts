@@ -1,13 +1,13 @@
-import { Actor } from '../../mongoose/actor.types';
 import {
+  Author,
   Rescued,
   Rescuer,
   Unrescued
 } from '../../mongoose/rescue/rescue.types';
 
-export interface CreateRescue {
-  author: Actor;
-  rescueDate: string;
+export interface CreateRescuePayload {
+  author: Author;
+  rescueDate: Date;
   rescued?: Rescued[];
   rescuers: Rescuer[];
   unrescued?: Unrescued[];

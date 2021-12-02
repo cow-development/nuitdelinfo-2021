@@ -2,6 +2,7 @@ import { ControllerService } from '../services/controller.service';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
 import { MonitoringService } from '../services/monitoring.service';
+import { PrivateRouter } from './private/private.router';
 import { PublicRouter } from './public/public.router';
 import { Router } from 'express';
 
@@ -12,7 +13,7 @@ export class AppRouter implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);
 
   private _publicRouter = <PublicRouter>{};
-  // private _privateRouter = <PrivateRouter>{};
+  private _privateRouter = <PrivateRouter>{};
 
   private _router = Router();
 
@@ -33,6 +34,9 @@ export class AppRouter implements IMonitored {
 
     this._publicRouter = new PublicRouter(this._controllerService.accountController);
     this._router.use('/public', this._publicRouter.router);
+
+    this._privateRouter = new PrivateRouter(this._controllerService.rescueController);
+    this._router.use('/private', this._privateRouter.router);
 
     this._router
       .stack

@@ -1,11 +1,16 @@
 import { Connection } from 'mongoose';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
+import { MonitoringService } from './monitoring.service';
+import {
+  RescueDocument,
+  RescueModel
+} from '../model/mongoose/rescue/rescue.types';
+import rescueSchema from '../model/mongoose/rescue/rescue.schema';
 import {
   UserDocument,
   UserModel
 } from '../model/mongoose/user/user.types';
-import { MonitoringService } from './monitoring.service';
 import userSchema from '../model/mongoose/user/user.schema';
 
 export class ModelService implements IMonitored {
@@ -17,6 +22,7 @@ export class ModelService implements IMonitored {
 
   get models() {
     return [
+      this._connection.model('rescue'),
       this._connection.model('user')
     ];
   }
@@ -26,6 +32,7 @@ export class ModelService implements IMonitored {
   async setupModels() {
     this._monitor.log(LogType.pending, 'Initializing mongoose models...');
 
+    this._connection?.model<RescueDocument>('rescue', rescueSchema) as RescueModel;
     this._connection?.model<UserDocument>('user', userSchema) as UserModel;
 
     this._connection
