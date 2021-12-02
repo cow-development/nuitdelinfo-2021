@@ -1,18 +1,12 @@
 import { Schema } from "mongoose";
 import actorSchema from "../actor.schema";
 
-const rescuedSchema = new Schema({
-  personalData: actorSchema
-});
-
-const rescuerSchema = new Schema({
-  personalData: actorSchema
-});
-
 const rescueSchema = new Schema({
+  author: actorSchema,
   rescueDate: Date,
-  rescued: [rescuedSchema],
-  rescuers: [rescuerSchema]
+  rescued: [actorSchema],
+  rescuers: [actorSchema],
+  unrescued: [actorSchema]
 });
 
 export default rescueSchema;

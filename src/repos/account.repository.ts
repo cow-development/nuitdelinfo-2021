@@ -1,7 +1,7 @@
 import { AppError } from '../model/error.model';
-import { AuthenticatePayload } from '../model/DTO/authenticate.payload';
+import { AuthenticatePayload } from '../model/DTO/account/authenticate.payload';
 import bcrypt from 'bcrypt';
-import { CreateUserPayload } from '../model/DTO/create-user.payload';
+import { CreateUserPayload } from '../model/DTO/account/create-user.payload';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
 import { MonitoringService } from '../services/monitoring.service';

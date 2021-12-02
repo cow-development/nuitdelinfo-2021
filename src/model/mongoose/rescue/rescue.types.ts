@@ -17,3 +17,5 @@ export interface Rescue {
 export interface Rescued extends Actor {}
 
 export interface Rescuer extends Actor {}
+
+export interface Unrescued extends Actor {}

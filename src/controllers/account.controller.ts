@@ -1,5 +1,5 @@
 import { AccountRepository } from '../repos/account.repository';
-import { AuthenticatePayload } from '../model/DTO/authenticate.payload';
+import { AuthenticatePayload } from '../model/DTO/account/authenticate.payload';
 import { AppError } from '../model/error.model';
 import { Helper } from '../helper.utils';
 import {
@@ -7,7 +7,7 @@ import {
   Request,
   Response
 } from 'express';
-import { CreateUserPayload } from '../model/DTO/create-user.payload';
+import { CreateUserPayload } from '../model/DTO/account/create-user.payload';
 
 export class AccountController {
   constructor(private _repo: AccountRepository) {}
