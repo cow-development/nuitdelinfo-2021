@@ -4,6 +4,9 @@ import {
   Model
 } from 'mongoose';
 
+// @ts-ignore
+import { ObjectId } from 'mongodb';
+
 export interface RescueDocument extends Rescue, Document {}
 
 export interface RescueModel extends Model<RescueDocument> {}

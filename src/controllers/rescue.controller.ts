@@ -23,7 +23,8 @@ export class RescueController {
       }
 
       return await this._repo.create(
-        <CreateRescuePayload>req.body
+        <CreateRescuePayload>req.body,
+        req.author._id
       );
   }
 

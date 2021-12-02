@@ -55,7 +55,10 @@ export class PrivateRouter implements IMonitored {
       try { user = jwt.verify(token, process.env.JWT as string); }
       catch (e) { throw new AppError(401, 'Invalid token.'); }
 
-      (req as SignedRequest).author = user as Partial<User>;
+      (req as SignedRequest).author =  {
+        _id: (user as any)._id,
+        ...user as Partial<User>
+      };
       
       next();
     });
