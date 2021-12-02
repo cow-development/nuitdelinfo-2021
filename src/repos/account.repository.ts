@@ -7,7 +7,7 @@ import { LogType } from '../model/log.model';
 import { MonitoringService } from '../services/monitoring.service';
 import {
   User,
-  Userdocument,
+  UserDocument,
   UserModel
 } from '../model/mongoose/user/user.types';
 
@@ -44,8 +44,8 @@ export class AccountRepository implements IMonitored {
     };
   }
   
-  async findByName(name: string, strict?: true): Promise<Userdocument> ;
-  async findByName(name: string, strict: false): Promise<Userdocument | null> ;
+  async findByName(name: string, strict?: true): Promise<UserDocument> ;
+  async findByName(name: string, strict: false): Promise<UserDocument | null> ;
   async findByName(name: string, strict: boolean = true) {
     const result = await this._model.findByName(name.toLowerCase()) || await this._model.findByName(name);
     if (!result && strict) {

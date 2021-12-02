@@ -1,8 +1,8 @@
+import actorSchema from '../actor.schema';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import { findByName } from './user.statics';
+import jwt from 'jsonwebtoken';
 import { Schema } from 'mongoose';
-import { Helper } from '../../../helper.utils';
 
 const userSchema = new Schema({
   username: {
@@ -10,22 +10,14 @@ const userSchema = new Schema({
     unique: true,
     required: true
   },
-  firstname: {
-    type: String,
-    set: Helper.normalizeFirstname
-  },
-  lastname: {
-    type: String,
-    uppercase: true
-  },
-  birthdate: Date,
   signUpDate: Date,
   password: {
     type: {
       hash: String,
       salt: String
     }
-  }
+  },
+  personalData: actorSchema
 });
 
 userSchema.statics.findByName = findByName;

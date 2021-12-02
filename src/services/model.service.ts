@@ -2,7 +2,7 @@ import { Connection } from 'mongoose';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
 import {
-  Userdocument,
+  UserDocument,
   UserModel
 } from '../model/mongoose/user/user.types';
 import { MonitoringService } from './monitoring.service';
@@ -26,7 +26,7 @@ export class ModelService implements IMonitored {
   async setupModels() {
     this._monitor.log(LogType.pending, 'Initializing mongoose models...');
 
-    this._connection?.model<Userdocument>('user', userSchema) as UserModel;
+    this._connection?.model<UserDocument>('user', userSchema) as UserModel;
 
     this._connection
       .modelNames()
