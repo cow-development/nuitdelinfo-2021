@@ -4,8 +4,8 @@ import {
 } from 'mongoose';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
-import { IUserModel } from '../model/mongoose/user/user.types';
-import { UserRepository } from '../repos/user.repository';
+import { UserModel } from '../model/mongoose/user/user.types';
+import { UserRepository } from '../repos/account.repository';
 import { MonitoringService } from './monitoring.service';
 
 export class RepositoryService implements IMonitored {
@@ -29,7 +29,7 @@ export class RepositoryService implements IMonitored {
     this._monitor.log(LogType.pending, 'Setting up repositories...');
 
     const model = this._models.find(model => model.modelName === 'user');
-    this._userRepository = new UserRepository(<IUserModel>model);
+    this._userRepository = new UserRepository(<UserModel>model);
 
     this._monitor.log(LogType.passed, 'Set up repositories');
   }

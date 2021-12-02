@@ -1,4 +1,4 @@
-import { IUserDocument } from './user.types';
+import { Userdocument } from './user.types';
 import { Model } from 'mongoose';
 
 /**
@@ -6,6 +6,6 @@ import { Model } from 'mongoose';
  * @param this User model.
  * @param name Name to look for.
  */
-export async function findByName(this: Model<IUserDocument, {}>, username: string) {
+export async function findByName(this: Model<Userdocument, {}>, username: string) {
   return await this.findOne({ username });
 }

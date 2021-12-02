@@ -7,7 +7,7 @@ import {
  * Represents a standard User Document from database.
  * Includes both IUser and Document own fields.
  */
-export interface IUserDocument extends IUser, Document {
+export interface Userdocument extends User, Document {
   /**
    * Check whether the given password matches the user's password.
    * @param password Given password.
@@ -24,30 +24,30 @@ export interface IUserDocument extends IUser, Document {
  * Represents a standard User mongoose model.
  * Contains documents of type IUserDocument.
  */
-export interface IUserModel extends Model<IUserDocument> {
+export interface UserModel extends Model<Userdocument> {
   /**
    * Find a user by its name.
    * @param this User model.
    * @param name Name to look for.
    */
-  findByName(this: Model<IUserDocument, {}>, username: string): Promise<IUserDocument>;
+  findByName(this: Model<Userdocument, {}>, username: string): Promise<Userdocument>;
 }
 
 /**
  * The representation of a user.
  */
-export interface IUser {
+export interface User {
   /** User's displayed nickname. */
   username: string;
 
   /** User's firstname. */
-  firstname: string;
+  firstname?: string;
 
   /** User's lastname. */
-  lastname: string;
+  lastname?: string;
 
   /** User's birthdate. */
-  birthdate: Date;
+  birthdate?: Date;
 
   /** User's sign up date. */
   signUpDate: Date;

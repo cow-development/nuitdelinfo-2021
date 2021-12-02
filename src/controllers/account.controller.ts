@@ -5,7 +5,7 @@ import {
   Request,
   Response
 } from 'express';
-import { UserRepository } from '../repos/user.repository';
+import { UserRepository } from '../repos/account.repository';
 import { CreateUserPayload } from '../model/DTO/create-user.payload';
 
 export class AccountController {
