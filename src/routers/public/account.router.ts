@@ -39,6 +39,14 @@ export class AccountRouter implements IMonitored {
         .catch(error => next(error));
     });
 
+    this._router.post('/auth', (req: Request, res: Response, next: NextFunction) => {
+      this._accountController.authenticate(req, res, next)
+        .then(result => {
+          res.status(200).json(result)
+        })
+        .catch(error => next(error));
+    });
+
     this._router
       .stack
       .forEach(route => {

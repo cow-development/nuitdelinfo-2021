@@ -1,12 +1,17 @@
+import { AppError } from '../model/error.model';
+import { AuthenticatePayload } from '../model/DTO/authenticate.payload';
 import bcrypt from 'bcrypt';
 import { CreateUserPayload } from '../model/DTO/create-user.payload';
-import { AppError } from '../model/error.model';
 import { IMonitored } from '../model/IMonitored';
 import { LogType } from '../model/log.model';
-import { User, Userdocument, UserModel } from '../model/mongoose/user/user.types';
 import { MonitoringService } from '../services/monitoring.service';
+import {
+  User,
+  Userdocument,
+  UserModel
+} from '../model/mongoose/user/user.types';
 
-export class UserRepository implements IMonitored {
+export class AccountRepository implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);
 
   get monitor() {
@@ -14,15 +19,31 @@ export class UserRepository implements IMonitored {
   }
 
   constructor(private _model: UserModel) {
-    this._monitor.log(LogType.passed, 'Initialized user repository');
+    this._monitor.log(LogType.passed, 'Initialized account repository');
   }
 
-  /**
-   * Find a user by its name.
-   * @param name Given name.
-   * @param strict Sets whether an error is thrown when no user is found.
-   * @returns Either an IUserDocument or (maybe) null if strict mode is set to false.
-   */
+  async authenticate(payload: AuthenticatePayload) {
+    const user = await this.findByName(payload.username);
+    
+    const hash = await bcrypt
+      .hash(
+        payload.password,
+        user.password.salt
+      );
+    if (hash !== user.password.hash)
+      throw new AppError(401, 'Incorrect username or password.');
+    
+    const {
+      password: hidden,
+      ...returned
+    } = user.toJSON();
+
+    return {
+      ...returned,
+      token: user.generateJWT()
+    };
+  }
+  
   async findByName(name: string, strict?: true): Promise<Userdocument> ;
   async findByName(name: string, strict: false): Promise<Userdocument | null> ;
   async findByName(name: string, strict: boolean = true) {
@@ -34,10 +55,6 @@ export class UserRepository implements IMonitored {
     return result;
   }
 
-  /**
-   * Create and save a new user in database.
-   * @param payload @see CreateUserPayload
-   */
   async create(payload: CreateUserPayload) {
     if (await this.findByName(payload.username, false)) {
       throw new AppError(409, 'User already exists.');
