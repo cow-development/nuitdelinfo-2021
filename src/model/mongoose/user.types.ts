@@ -40,6 +40,18 @@ export interface IUser {
   /** User's displayed nickname. */
   username: string;
 
+  /** User's firstname. */
+  firstname: string;
+
+  /** User's lastname. */
+  lastname: string;
+
+  /** User's birthdate. */
+  birthdate: Date;
+
+  /** User's sign up date. */
+  signUpDate: Date;
+
   /** User's password details. */
   password: {
     hash: string;
