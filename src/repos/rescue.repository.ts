@@ -24,6 +24,7 @@ export class RescueRepository implements IMonitored {
 
   async create(payload: CreateRescuePayload, authorId: string) {
     const rescue: Omit<Rescue, 'author'> = {
+      location: payload.location,
       rescueDate: payload.rescueDate,
       rescued: payload.rescued || [],
       rescuers: payload.rescuers,

@@ -9,6 +9,17 @@ const authorSchema = new Schema({
 
 const rescueSchema = new Schema({
   author: authorSchema,
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true
+    },
+    coordinates: {
+      type: [Number],
+      required: true
+    }
+  },
   rescueDate: Date,
   rescued: [actorSchema],
   rescuers: [actorSchema],

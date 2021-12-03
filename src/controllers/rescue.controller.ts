@@ -17,6 +17,8 @@ export class RescueController {
       || Helper.isObjectEmpty(req.body)
       || !req.body.author
       || !req.body.rescueDate
+      || !req.body.location
+      || req.body.location.coordinates.length < 2
       || Helper.isObjectEmpty(req.body.author)
       || !req.body.rescuers
       || req.body.rescuers.length === 0) {

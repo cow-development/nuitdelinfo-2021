@@ -13,6 +13,7 @@ export interface RescueModel extends Model<RescueDocument> {}
 
 export interface Rescue {
   author: Author;
+  location: GeographicPoint;
   rescueDate: Date;
   rescued: Rescued[];
   rescuers: Rescuer[];
@@ -24,6 +25,11 @@ export type Author = {
   firstname: string;
   lastname: string;
 };
+
+export interface GeographicPoint {
+  type: 'Point';
+  coordinates: [number, number];
+}
 
 export interface Rescued extends Actor {}
 

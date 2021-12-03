@@ -1,5 +1,6 @@
 import {
   Author,
+  GeographicPoint,
   Rescued,
   Rescuer,
   Unrescued
@@ -7,6 +8,7 @@ import {
 
 export interface CreateRescuePayload {
   author: Omit<Author, '_id'>;
+  location: GeographicPoint;
   rescueDate: Date;
   rescued?: Rescued[];
   rescuers: Rescuer[];
