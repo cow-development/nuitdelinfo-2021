@@ -3,6 +3,7 @@ import { AuthenticatePayload } from '../model/DTO/account/authenticate.payload';
 import bcrypt from 'bcrypt';
 import { CreateUserPayload } from '../model/DTO/account/create-user.payload';
 import { IMonitored } from '../model/IMonitored';
+import jwt from 'jsonwebtoken';
 import { LogType } from '../model/log.model';
 import { MonitoringService } from '../services/monitoring.service';
 import {
@@ -44,25 +45,6 @@ export class AccountRepository implements IMonitored {
       token: user.generateJWT()
     };
   }
-  
-  async findByName(name: string, strict?: true): Promise<UserDocument> ;
-  async findByName(name: string, strict: false): Promise<UserDocument | null> ;
-  async findByName(name: string, strict: boolean = true) {
-    const result = await this._model.findByName(name.toLowerCase()) || await this._model.findByName(name);
-    if (!result && strict) {
-      throw new AppError(404, `User with name '${name}' couldn't be found.`);
-    }
-
-    return result;
-  }
-
-  async findById(userId: string) {
-    const user = await this._model.findById(userId);
-    if (!user) {
-      throw new AppError(404, 'User does not exist.');
-    }
-    return user;
-  }
 
   async create(payload: CreateUserPayload) {
     if (await this.findByName(payload.username, false)) {
@@ -98,6 +80,31 @@ export class AccountRepository implements IMonitored {
       token: created.generateJWT(),
       ...returned
     };
+  }
+
+  async delete(userId: string, token: string) {
+    const user = await this.findById(userId);
+    await this._model.findByIdAndDelete(user.id);
+    return null;
+  }
+  
+  async findByName(name: string, strict?: true): Promise<UserDocument> ;
+  async findByName(name: string, strict: false): Promise<UserDocument | null> ;
+  async findByName(name: string, strict: boolean = true) {
+    const result = await this._model.findByName(name.toLowerCase()) || await this._model.findByName(name);
+    if (!result && strict) {
+      throw new AppError(404, `User with name '${name}' couldn't be found.`);
+    }
+
+    return result;
+  }
+
+  async findById(userId: string) {
+    const user = await this._model.findById(userId);
+    if (!user) {
+      throw new AppError(404, 'User does not exist.');
+    }
+    return user;
   }
 
   async update(userId: string, payload: UpdateUserPayload) {

@@ -41,7 +41,22 @@ export class AccountController {
       );
   }
   
-  async update(req: Request, res: Response, next: NextFunction) {
+  async delete(req: SignedRequest, res: Response, next: NextFunction) {
+    if (!req.params.userId) {
+        throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
+    }
+
+    if (!isValidObjectId(req.params.userId)) {
+      throw new AppError(400, 'Invalid object id.');
+    }
+
+    return await this._repo.delete(
+      req.params.userId as string,
+      req.token
+    );
+  }
+  
+  async update(req: SignedRequest, res: Response, next: NextFunction) {
     if (!req.body
       || Helper.isObjectEmpty(req.body)
       || !req.params.userId) {
