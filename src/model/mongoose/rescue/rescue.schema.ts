@@ -1,10 +1,17 @@
 import { Schema, Types } from "mongoose";
+import { Helper } from "../../../helper.utils";
 import actorSchema from "../actor.schema";
 
 const authorSchema = new Schema({
   _id: Types.ObjectId,
-  firstname: String,
-  lastname: String
+  firstname: {
+    type: String,
+    set: Helper.normalizeFirstname
+  },
+  lastname: {
+    type: String,
+    uppercase: true
+  }
 })
 
 const rescueSchema = new Schema({
