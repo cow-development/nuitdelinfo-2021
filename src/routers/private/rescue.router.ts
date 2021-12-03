@@ -40,7 +40,7 @@ export class RescueRouter implements IMonitored {
         .catch(error => next(error));
     });
 
-    this._router.get('/', (req: Request, res: Response, next: NextFunction) => {
+    this._router.get('/all', (req: Request, res: Response, next: NextFunction) => {
       this._rescueController.findAll(req as SignedRequest, res, next)
         .then(result => {
           res.status(200).json(result)

@@ -41,6 +41,10 @@ export class PrivateRouter implements IMonitored {
     this._monitor.log(LogType.pending, 'Setting up private routes...');
 
     this._router.use((req: Request, res: Response, next: NextFunction) => {
+      if (req.path.includes('/all')) {
+        return;
+      }
+
       if (!req.headers.authorization)
         throw new AppError(401, 'Missing authorization headers.');
       

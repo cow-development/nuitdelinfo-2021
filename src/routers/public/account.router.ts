@@ -37,6 +37,7 @@ export class AccountRouter implements IMonitored {
 
     this._router.use((req: Request, res: Response, next: NextFunction) => {
       if (!req.headers.authorization) {
+        next();
         return;
       }
       
