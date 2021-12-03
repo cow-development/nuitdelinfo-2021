@@ -10,6 +10,7 @@ import {
   UserDocument,
   UserModel
 } from '../model/mongoose/user/user.types';
+import { UpdateUserPayload } from '../model/DTO/account/update-user.payload';
 
 export class AccountRepository implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);
@@ -99,6 +100,22 @@ export class AccountRepository implements IMonitored {
     };
   }
 
+  async update(userId: string, payload: UpdateUserPayload) {
+    let user = await this.findById(userId);
+
+    const newPersonalData: User['personalData'] = {
+      firstname: payload.firstname || user.personalData?.firstname,
+      lastname: payload.lastname || user.personalData?.lastname,
+      birthdate: payload.birthdate ? new Date(payload.birthdate) : user.personalData?.birthdate
+    };
+
+    await this._model.findByIdAndUpdate(user.id, { ...user.toJSON(), personalData: newPersonalData });
+
+    user = await this.findById(user.id);
+    const { password, ...returnedUser } = user.toJSON();
+    return returnedUser;
+  }
+  
   async verify(userId: string) {
     const user = await this.findById(userId);
     const { password, ...returnedUser } = user.toJSON();

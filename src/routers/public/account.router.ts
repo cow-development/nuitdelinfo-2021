@@ -40,6 +40,13 @@ export class AccountRouter implements IMonitored {
         next();
         return;
       }
+
+      if (
+        (req.path.includes('/update')
+        || req.path.includes('/delete'))
+        && !req.headers.authorization) {
+        throw new AppError(401, 'Missing authorization headers.');
+      }
       
       const [
         type,
@@ -77,6 +84,14 @@ export class AccountRouter implements IMonitored {
 
     this._router.get('/verify', (req: Request, res: Response, next: NextFunction) => {
       this._accountController.verify(req as SignedRequest, res, next)
+        .then(result => {
+          res.status(200).json(result)
+        })
+        .catch(error => next(error));
+    });
+
+    this._router.put('/update/:userId', (req: Request, res: Response, next: NextFunction) => {
+      this._accountController.update(req as SignedRequest, res, next)
         .then(result => {
           res.status(200).json(result)
         })
