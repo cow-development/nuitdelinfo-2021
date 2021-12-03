@@ -1,6 +1,7 @@
 import { AppError } from '../model/error.model';
 import { CreateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
 import { Helper } from '../helper.utils';
+import { isValidObjectId } from 'mongoose';
 import {
   NextFunction,
   Response
@@ -26,6 +27,20 @@ export class RescueController {
         <CreateRescuePayload>req.body,
         req.author._id
       );
+  }
+
+  async delete(req: SignedRequest, res: Response, next: NextFunction) {
+    if (!req.params
+      || Helper.isObjectEmpty(req.params)
+      || !req.params.rescueId) {
+        throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
+      }
+
+      if (!isValidObjectId(req.params.rescueId)) {
+        throw new AppError(400, 'Invalid object id.');
+      }
+
+      return await this._repo.delete(req.params.rescueId as string);
   }
 
   async findAll(req: SignedRequest, res: Response, next: NextFunction) {

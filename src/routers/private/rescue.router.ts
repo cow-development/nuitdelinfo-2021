@@ -48,6 +48,14 @@ export class RescueRouter implements IMonitored {
         .catch(error => next(error));
     });
 
+    this._router.delete('/:rescueId', (req: Request, res: Response, next: NextFunction) => {
+      this._rescueController.delete(req as SignedRequest, res, next)
+        .then(result => {
+          res.status(200).json(result)
+        })
+        .catch(error => next(error));
+    });
+
     this._router
       .stack
       .forEach(route => {

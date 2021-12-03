@@ -9,6 +9,7 @@ import { CreateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
 
 // @ts-ignore
 import { ObjectId } from 'mongodb';
+import { AppError } from '../model/error.model';
 
 export class RescueRepository implements IMonitored {
   private _monitor = new MonitoringService(this.constructor.name);
@@ -37,6 +38,14 @@ export class RescueRepository implements IMonitored {
         lastname: payload.author?.lastname
       }
     });
+  }
+
+  async delete(rescueId: string) {
+    const rescue = await this._model.findById(rescueId);
+    if (!rescue) {
+      throw new AppError(404, `Couldn't find any rescue with id '${rescueId}'.`);
+    }
+    return await this._model.findByIdAndDelete(rescueId);
   }
 
   async findAll() {
