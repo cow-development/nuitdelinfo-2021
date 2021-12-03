@@ -42,6 +42,7 @@ export class PrivateRouter implements IMonitored {
 
     this._router.use((req: Request, res: Response, next: NextFunction) => {
       if (req.path.includes('/all')) {
+        next();
         return;
       }
 
