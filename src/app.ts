@@ -44,7 +44,7 @@ import { LogType } from './model/log.model';
   // initialize server app
   const server = new Server();
 
-  if (process.env.APP_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     // make server use static front-end files
     server.app.use(express.static('public'));
   }
