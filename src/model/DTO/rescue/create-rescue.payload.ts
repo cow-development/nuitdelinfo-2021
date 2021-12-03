@@ -14,3 +14,5 @@ export interface CreateRescuePayload {
   rescuers: Rescuer[];
   unrescued?: Unrescued[];
 }
+
+export type UpdateRescuePayload = Omit<Partial<CreateRescuePayload>, 'author'>;

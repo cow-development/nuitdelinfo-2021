@@ -5,7 +5,7 @@ import {
   Rescue,
   RescueModel
 } from '../model/mongoose/rescue/rescue.types';
-import { CreateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
+import { CreateRescuePayload, UpdateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
 
 // @ts-ignore
 import { ObjectId } from 'mongodb';
@@ -73,5 +73,31 @@ export class RescueRepository implements IMonitored {
       throw new AppError(404, `Couldn't find any rescue with id '${rescueId}'.`);
     }
     return rescue;
+  }
+
+  async update(rescueId: string, payload: UpdateRescuePayload, authorId: string) {
+    const rescue = await this.findById(rescueId);
+
+    const castedId = new ObjectId(rescue.author._id);
+    if (!castedId.equals(authorId)) {
+      throw new AppError(403, 'User must have authored the rescue to update it.');
+    }
+
+    const user = await this._userRepo.findById(authorId);
+    if (rescue.isConfirmed && !user.isAdmin) {
+      throw new AppError(403, 'Rescue record is already confirmed and therefore cannot be updated anymore.');
+    }
+
+    const newRescue: Rescue = {
+      author: rescue.author,
+      location: payload.location || rescue.location,
+      rescueDate: payload.rescueDate || rescue.rescueDate,
+      rescued: payload.rescued || rescue.rescued,
+      rescuers: payload.rescuers || rescue.rescuers,
+      unrescued: payload.unrescued || rescue.unrescued
+    };
+
+    await this._model.findByIdAndUpdate(rescue.id, newRescue);
+    return await this.findById(rescue.id);
   }
 }

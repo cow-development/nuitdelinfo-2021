@@ -1,5 +1,5 @@
 import { AppError } from '../model/error.model';
-import { CreateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
+import { CreateRescuePayload, UpdateRescuePayload } from '../model/DTO/rescue/create-rescue.payload';
 import { Helper } from '../helper.utils';
 import { isValidObjectId } from 'mongoose';
 import {
@@ -64,5 +64,23 @@ export class RescueController {
 
   async findAll(req: SignedRequest, res: Response, next: NextFunction) {
     return await this._repo.findAll();
+  }
+  
+  async update(req: SignedRequest, res: Response, next: NextFunction) {
+    if (!req.body
+      || Helper.isObjectEmpty(req.body)
+      || !req.params.rescueId) {
+        throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
+      }
+
+      if (!isValidObjectId(req.params.rescueId)) {
+        throw new AppError(400, 'Invalid object id.');
+      }
+
+      return await this._repo.update(
+        req.params.rescueId,
+        <UpdateRescuePayload>req.body,
+        req.author._id
+      );
   }
 }
