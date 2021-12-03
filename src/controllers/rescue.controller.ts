@@ -12,6 +12,23 @@ import { SignedRequest } from '../model/signed-request.model';
 export class RescueController {
   constructor(private _repo: RescueRepository) {}
   
+  async confirm(req: SignedRequest, res: Response, next: NextFunction) {
+    if (!req.params
+      || Helper.isObjectEmpty(req.params)
+      || !req.params.rescueId) {
+        throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
+      }
+
+    if (!isValidObjectId(req.params.rescueId)) {
+      throw new AppError(400, 'Invalid object id.');
+    }
+
+    return await this._repo.confirm(
+      req.params.rescueId as string,
+      req.author._id
+    );
+  }
+  
   async create(req: SignedRequest, res: Response, next: NextFunction) {
     if (!req.body
       || Helper.isObjectEmpty(req.body)
@@ -38,11 +55,11 @@ export class RescueController {
         throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
       }
 
-      if (!isValidObjectId(req.params.rescueId)) {
-        throw new AppError(400, 'Invalid object id.');
-      }
+    if (!isValidObjectId(req.params.rescueId)) {
+      throw new AppError(400, 'Invalid object id.');
+    }
 
-      return await this._repo.delete(req.params.rescueId as string);
+    return await this._repo.delete(req.params.rescueId as string);
   }
 
   async findAll(req: SignedRequest, res: Response, next: NextFunction) {

@@ -55,6 +55,14 @@ export class AccountRepository implements IMonitored {
     return result;
   }
 
+  async findById(userId: string) {
+    const user = await this._model.findById(userId);
+    if (!user) {
+      throw new AppError(404, 'User does not exist.');
+    }
+    return user;
+  }
+
   async create(payload: CreateUserPayload) {
     if (await this.findByName(payload.username, false)) {
       throw new AppError(409, 'User already exists.');

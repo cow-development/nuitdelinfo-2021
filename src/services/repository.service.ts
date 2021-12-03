@@ -24,7 +24,7 @@ export class RepositoryService implements IMonitored {
     return this._rescueRepository;
   }
 
-  get userRepository() {
+  get accountRepository() {
     return this._accountRepository;
   }
 
@@ -39,7 +39,10 @@ export class RepositoryService implements IMonitored {
     this._accountRepository = new AccountRepository(<UserModel>model);
 
     model = this._models.find(model => model.modelName === 'rescue');
-    this._rescueRepository = new RescueRepository(<RescueModel>model);
+    this._rescueRepository = new RescueRepository(
+      <RescueModel>model,
+      this._accountRepository
+    );
 
     this._monitor.log(LogType.passed, 'Set up repositories');
   }

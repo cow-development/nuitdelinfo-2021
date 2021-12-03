@@ -30,7 +30,7 @@ export class ControllerService implements IMonitored {
   private _setupControllers() {
     this._monitor.log(LogType.pending, 'Setting up controllers...');
 
-    this._accountController = new AccountController(this._rpService.userRepository);
+    this._accountController = new AccountController(this._rpService.accountRepository);
     this._rescueController = new RescueController(this._rpService.rescueRepository);
 
     this._monitor.log(LogType.passed, 'Set up controllers');
