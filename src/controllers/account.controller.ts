@@ -8,6 +8,7 @@ import {
   Response
 } from 'express';
 import { CreateUserPayload } from '../model/DTO/account/create-user.payload';
+import { SignedRequest } from '../model/signed-request.model';
 
 export class AccountController {
   constructor(private _repo: AccountRepository) {}
@@ -18,7 +19,7 @@ export class AccountController {
       || !req.body.username
       || !req.body.password) {
         throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
-      }
+    }
 
       return await this._repo.authenticate(
         <AuthenticatePayload>req.body
@@ -31,10 +32,15 @@ export class AccountController {
       || !req.body.username
       || !req.body.password) {
         throw new AppError(400, 'Missing entire body or one or a few mandatory fields.');
-      }
+    }
 
       return await this._repo.create(
         <CreateUserPayload>req.body
       );
+  }
+
+  async verify(req: SignedRequest, res: Response, next: NextFunction) {
+    const verifiedUser = await this._repo.verify(req.author._id);
+    return { ...verifiedUser, token: req.token };
   }
 }

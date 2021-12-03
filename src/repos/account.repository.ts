@@ -98,4 +98,10 @@ export class AccountRepository implements IMonitored {
       ...returned
     };
   }
+
+  async verify(userId: string) {
+    const user = await this.findById(userId);
+    const { password, ...returnedUser } = user.toJSON();
+    return returnedUser;
+  }
 }
