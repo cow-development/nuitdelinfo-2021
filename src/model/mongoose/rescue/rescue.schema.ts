@@ -23,7 +23,11 @@ const rescueSchema = new Schema({
   rescueDate: Date,
   rescued: [actorSchema],
   rescuers: [actorSchema],
-  unrescued: [actorSchema]
+  unrescued: [actorSchema],
+  isConfirmed: {
+    type: Boolean,
+    default: false
+  }
 });
 
 export default rescueSchema;

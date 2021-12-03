@@ -17,7 +17,11 @@ const userSchema = new Schema({
       salt: String
     }
   },
-  personalData: actorSchema
+  personalData: actorSchema,
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
 });
 
 userSchema.statics.findByName = findByName;

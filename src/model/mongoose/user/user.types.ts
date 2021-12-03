@@ -25,4 +25,5 @@ export interface User {
     lastname?: string;
     birthdate?: Date;
   };
+  isAdmin?: boolean;
 }

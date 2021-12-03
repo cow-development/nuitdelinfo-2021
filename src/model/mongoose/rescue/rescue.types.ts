@@ -18,6 +18,7 @@ export interface Rescue {
   rescued: Rescued[];
   rescuers: Rescuer[];
   unrescued: Unrescued[];
+  isConfirmed?: boolean;
 }
 
 export type Author = {
